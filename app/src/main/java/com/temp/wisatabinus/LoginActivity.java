@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
-                // validasi email dan password sesuai DB
+                // validasi email dan password sesuai DB belom !
             }
         });
 
