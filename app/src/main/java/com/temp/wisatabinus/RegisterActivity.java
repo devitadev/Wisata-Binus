@@ -9,7 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 public class RegisterActivity extends AppCompatActivity {
+
+    UserHelper userHelper = new UserHelper(this);
+    ArrayList<User> users;
 
     EditText etEmail, etPhoneNumber, etPassword;
     Button btnLogin, btnRegister;
@@ -28,6 +33,10 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         btnLogin = findViewById(R.id.btn_login);
 
+        userHelper.open();
+        users = userHelper.getUsers();
+        userHelper.close();
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,13 +46,16 @@ public class RegisterActivity extends AppCompatActivity {
                 register = true;
                 message = "";
 
-                validateEmail(email); // validate email ada yang kurang
+                validateEmail(email);
                 validatePhoneNumber(phoneNumber);
                 validatePassword(password);
 
                 // kalo register berhasil
                 if(register){
-                    // kalo berhasil save user data ke DB tapi belom !!
+                    userHelper.open();
+                    userHelper.registerUser(email, phoneNumber, password);
+                    userHelper.close();
+
                     // kirim SMS register successfull tapi belom !!
 
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -68,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    void validateEmail(String email){
+    private void validateEmail(String email){
         // email harus diakhiri .com
         if(!email.endsWith(".com")){
             message = "email must end with '.com'\n";
@@ -89,10 +101,17 @@ public class RegisterActivity extends AppCompatActivity {
             message = message + "email must contain only one ‘@’\n";
             register = false;
         }
-        // validasi email address must be unique or have not been registered belom !!!
+        // validasi email tidak pernah diregister
+        n = users.size();
+        for(int i=0; i<n; i++){
+            if(users.get(i).getUserEmailAddress().equals(email)){
+                message = message + "your email already been registered\n";
+                register = false;
+            }
+        }
     }
 
-    void validatePhoneNumber(String phoneNumber){
+    private void validatePhoneNumber(String phoneNumber){
         // phone number harus 10 - 12 digits
         if(phoneNumber.length() < 10 || phoneNumber.length() > 12) {
             message = message + "phone number must be 10-12 digits\n";
@@ -105,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    void validatePassword(String password){
+    private void validatePassword(String password){
         int n = password.length();
         if(n < 8){
             message = message + "password must be at least eight characters\n";
