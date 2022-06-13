@@ -8,6 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.temp.wisatabinus.databinding.ActivityCampusLocationBinding;
@@ -40,7 +41,8 @@ public class CampusLocationActivity extends FragmentActivity implements OnMapRea
 
         // Add a marker in Sydney and move the camera
         LatLng loc = new LatLng(campus.getCampusLatitude(), campus.getCampusLongitude());
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(20).build();
         mMap.addMarker(new MarkerOptions().position(loc).title(campus.getCampusName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }
