@@ -84,5 +84,16 @@ public class CampusDetailActivity extends AppCompatActivity {
             });
         }
 
+        btnViewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CampusDetailActivity.this, CampusLocationActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("campus", campus);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
     }
 }

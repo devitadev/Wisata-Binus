@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wisata Binus</string>
+    <string name="title_activity_campus_location">CampusLocationActivity</string>
 </resources>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.temp.wisatabinus">
+    package="com.temp.wisatabinus" >
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,7 +12,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WisataBinus">
+        android:theme="@style/Theme.WisataBinus" >
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDEmzvdvaqkwamrVemRepoNFBx9IxRYIkY" />
+
+        <activity
+            android:name=".CampusLocationActivity"
+            android:exported="false"
+            android:label="@string/title_activity_campus_location" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -18,21 +29,18 @@
             android:name=".FavouriteCampusActivity"
             android:exported="false" />
         <activity
-            android:name=".CampusLocationActivity"
-            android:exported="false" />
-        <activity
             android:name=".CampusDetailActivity"
             android:exported="false" />
         <activity
             android:name=".CampusActivity"
-            android:exported="true">
+            android:exported="true" >
         </activity>
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
