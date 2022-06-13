@@ -62,4 +62,22 @@ public class UserHelper {
         sqLiteDatabase.execSQL(insertQuery);
     }
 
+    public User getUserByID(Integer userID){
+        User user = null;
+        String selectQuery = String.format("SELECT * FROM %s", user_table_name);
+        Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if(cursor.getCount() > 0) {
+            String userEmailAddress = cursor.getString(cursor.getColumnIndexOrThrow("UserEmailAddress"));
+            String userPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("UserPhoneNumber"));
+            String userPassword = cursor.getString(cursor.getColumnIndexOrThrow("UserPassword"));
+            user = new User(userID, userEmailAddress,userPhoneNumber, userPassword);
+        }
+        return user;
+    }
+
+    public void changePassword(Integer userID, String newPassword){
+        String updateQuery = String.format("UPDATE %s SET UserPassword='%s' WHERE UserID=%d", user_table_name, newPassword, userID);
+        sqLiteDatabase.execSQL(updateQuery);
+    }
 }

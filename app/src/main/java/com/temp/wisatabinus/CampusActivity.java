@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,13 +20,15 @@ public class CampusActivity extends AppCompatActivity {
     ArrayList<Campus> campuses;
     User user;
 
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREFERENCE_NAME = "myPreference";
+    private static final String KEY_ID = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campus);
 
-        Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("user");
         campusHelper.open();
         campuses = campusHelper.getCampuses();
         campusHelper.close();
@@ -35,10 +38,8 @@ public class CampusActivity extends AppCompatActivity {
         RecyclerView campusRecycler = findViewById(R.id.rv_campuses);
         CampusAdapter campusAdapter = new CampusAdapter(this);
         campusAdapter.setCampuses(campuses);
-        campusAdapter.setUser(user);
         campusRecycler.setAdapter(campusAdapter);
         campusRecycler.setLayoutManager(new GridLayoutManager(this, 2));
-
     }
 
     @Override
@@ -48,22 +49,16 @@ public class CampusActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent intent = null;
-        Bundle bundle = new Bundle();
-
+        Intent intent;
         switch(item.getItemId()){
             case R.id.favourite_campus_page:
                 intent = new Intent (this, FavouriteCampusActivity.class);
+                startActivity(intent);
                 break;
             case R.id.profile_page:
                 intent = new Intent (this, ProfileActivity.class);
+                startActivity(intent);
                 break;
-        }
-
-        if(intent != null) {
-            bundle.putSerializable("user", user);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
         return true;
     }

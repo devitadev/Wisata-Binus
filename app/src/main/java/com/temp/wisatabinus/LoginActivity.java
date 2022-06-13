@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,10 +33,22 @@ public class LoginActivity extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btnLogin, btnRegister;
 
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREFERENCE_NAME = "myPreference";
+    private static final String KEY_ID = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        // kalo dah pernah login langsung ke campus page
+        Integer id = sharedPreferences.getInt(KEY_ID, -1);
+        if (id != -1) {
+            Intent intent = new Intent(new Intent(LoginActivity.this, CampusActivity.class));
+            startActivity(intent);
+        }
 
         // kalo DB masih kosong maka fetch campus data and save ke DB
         campusHelper.open();
@@ -66,11 +79,13 @@ public class LoginActivity extends AppCompatActivity {
                     if(email.equals(users.get(i).getUserEmailAddress())){
                         if(password.equals(users.get(i).getUserPassword())) {
                             login = true;
+                            // biar bisa tetep ke logged in maka save data ke shared preference
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(KEY_ID, users.get(i).getUserID());
+                            editor.apply();
                             Intent intent = new Intent(new Intent(LoginActivity.this, CampusActivity.class));
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("user", users.get(i));
-                            intent.putExtras(bundle);
                             startActivity(intent);
+                            Toast.makeText(LoginActivity.this, "LOGIN SUCCESS", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     }

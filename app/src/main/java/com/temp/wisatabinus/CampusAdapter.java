@@ -22,11 +22,9 @@ public class CampusAdapter extends RecyclerView.Adapter<CampusAdapter.ViewHolder
 
     private Context context;
     private ArrayList<Campus> campuses;
-    private User user;
 
     public CampusAdapter(Context context) { this.context = context; }
     public void setCampuses(ArrayList<Campus> campuses) { this.campuses = campuses; }
-    public void setUser(User user) { this.user = user; }
 
     @NonNull
     @Override
@@ -48,7 +46,6 @@ public class CampusAdapter extends RecyclerView.Adapter<CampusAdapter.ViewHolder
                 Intent intent = new Intent(context, CampusDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("campus", campuses.get(position));
-                bundle.putSerializable("user", user);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
