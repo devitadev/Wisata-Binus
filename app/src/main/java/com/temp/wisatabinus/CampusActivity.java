@@ -33,8 +33,6 @@ public class CampusActivity extends AppCompatActivity {
         campuses = campusHelper.getCampuses();
         campusHelper.close();
 
-        System.out.println("Size : " + campuses.size());
-
         RecyclerView campusRecycler = findViewById(R.id.rv_campuses);
         CampusAdapter campusAdapter = new CampusAdapter(this);
         campusAdapter.setCampuses(campuses);
