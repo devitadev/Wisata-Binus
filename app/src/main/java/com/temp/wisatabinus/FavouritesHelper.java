@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+
 public class FavouritesHelper {
 
     public static String favourites_table_name = "TrFavourites";
@@ -41,6 +43,30 @@ public class FavouritesHelper {
     public void removeFavourite(Integer userID, Integer campusID){
         String deleteQuery = String.format("DELETE FROM %s WHERE UserID=%d AND CampusID=%d", favourites_table_name, userID, campusID);
         sqLiteDatabase.execSQL(deleteQuery);
+    }
+
+    public ArrayList<Campus> getFavourites(Integer userID){
+        ArrayList<Campus> favourites = new ArrayList<>();
+        String selectQuery = String.format("SELECT * FROM %s INNER JOIN %s ON %s.CampusID=%s.CampusID WHERE UserID=%d",
+                favourites_table_name, CampusHelper.campus_table_name, favourites_table_name, CampusHelper.campus_table_name, userID);
+        Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+
+        int n = cursor.getCount();
+        if (n > 0){
+            do{
+                Integer campusID = cursor.getInt(cursor.getColumnIndexOrThrow("CampusID"));
+                String campusName = cursor.getString(cursor.getColumnIndexOrThrow("CampusName"));
+                String campusLocation = cursor.getString(cursor.getColumnIndexOrThrow("CampusLocation"));
+                String campusAddress = cursor.getString(cursor.getColumnIndexOrThrow("CampusAddress"));
+                Double campusLatitude = cursor.getDouble(cursor.getColumnIndexOrThrow("CampusLatitude"));
+                Double campusLongitude = cursor.getDouble(cursor.getColumnIndexOrThrow("CampusLongitude"));
+                String campusImage = cursor.getString(cursor.getColumnIndexOrThrow("CampusImage"));
+                favourites.add(new Campus(campusID, campusName, campusLocation, campusAddress, campusLatitude, campusLongitude, campusImage));
+                cursor.moveToNext();
+            }while(!cursor.isAfterLast());
+        }
+        return favourites;
     }
 
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/favourite_campus_page"
+        android:title="Favourite Campus Page"/>
+    <item
+        android:id="@+id/profile_page"
+        android:title="Profile Page" />
+</menu>
