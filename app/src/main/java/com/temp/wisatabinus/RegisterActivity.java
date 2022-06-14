@@ -2,9 +2,14 @@ package com.temp.wisatabinus;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +23,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText etEmail, etPhoneNumber, etPassword;
     Button btnLogin, btnRegister;
+
+    Integer sms_permission;
+    SmsManager sm;
 
     boolean register;
     String message;
@@ -36,6 +44,13 @@ public class RegisterActivity extends AppCompatActivity {
         userHelper.open();
         users = userHelper.getUsers();
         userHelper.close();
+
+        sm = SmsManager.getDefault();
+        sms_permission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+
+        if (sms_permission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS},1);
+        }
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
                     userHelper.registerUser(email, phoneNumber, password);
                     userHelper.close();
 
-                    // kirim SMS register successfull tapi belom !!
+                    // kirim SMS register successfull
+                    sm.sendTextMessage(phoneNumber, null, "Account registration successfull!", null, null);
 
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
