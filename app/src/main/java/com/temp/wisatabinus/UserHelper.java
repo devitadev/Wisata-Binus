@@ -64,7 +64,7 @@ public class UserHelper {
 
     public User getUserByID(Integer userID){
         User user = null;
-        String selectQuery = String.format("SELECT * FROM %s", user_table_name);
+        String selectQuery = String.format("SELECT * FROM %s WHERE UserID=%d", user_table_name, userID);
         Cursor cursor = sqLiteDatabase.rawQuery(selectQuery, null);
         cursor.moveToFirst();
         if(cursor.getCount() > 0) {
